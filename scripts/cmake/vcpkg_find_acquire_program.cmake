@@ -14,9 +14,13 @@
 ## The current list of programs includes:
 ##
 ## - 7Z
+## - ARIA2 (Downloader)
 ## - BISON
+## - DARK
+## - DOXYGEN
 ## - FLEX
 ## - GASPREPROCESSOR
+## - GPERF
 ## - PERL
 ## - PYTHON2
 ## - PYTHON3
@@ -26,8 +30,8 @@
 ## - NASM
 ## - NINJA
 ## - NUGET
+## - SCONS
 ## - YASM
-## - ARIA2 (Downloader)
 ##
 ## Note that msys2 has a dedicated helper function: [`vcpkg_acquire_msys`](vcpkg_acquire_msys.md).
 ##
@@ -93,11 +97,18 @@ function(vcpkg_find_acquire_program VAR)
   elseif(VAR MATCHES "PYTHON3")
     if(CMAKE_HOST_WIN32)
       set(PROGNAME python)
-      set(SUBDIR "python-3.7.3")
+      if (VCPKG_TARGET_ARCHITECTURE STREQUAL x86)
+        set(SUBDIR "python-3.7.3-x86")
+        set(URL "https://www.python.org/ftp/python/3.7.3/python-3.7.3-embed-win32.zip")
+        set(ARCHIVE "python-3.7.3-embed-win32.zip")
+        set(HASH 2c1b1f0a29d40a91771ae21a5f733eedc10984cd182cb10c2793bbd24191a89f20612a3f23c34047f37fb06369016bfd4a52915ed1b4a56f8bd2b4ca6994eb31)
+      else()
+        set(SUBDIR "python-3.7.3-x64")
+        set(URL "https://www.python.org/ftp/python/3.7.3/python-3.7.3-embed-amd64.zip")
+        set(ARCHIVE "python-3.7.3-embed-amd64.zip")
+        set(HASH 4b3e0067b5e8d00b1cac5d556ab4fbd71df2a1852afb3354ee62363aabc8801aca84da09dbd26125527ae54b50488f808c1d82abf18969c23a51dcd57576885f)
+      endif()
       set(PATHS ${DOWNLOADS}/tools/python/${SUBDIR})
-      set(URL "https://www.python.org/ftp/python/3.7.3/python-3.7.3-embed-win32.zip")
-      set(ARCHIVE "python-3.7.3-embed-win32.zip")
-      set(HASH 2c1b1f0a29d40a91771ae21a5f733eedc10984cd182cb10c2793bbd24191a89f20612a3f23c34047f37fb06369016bfd4a52915ed1b4a56f8bd2b4ca6994eb31)
       set(POST_INSTALL_COMMAND ${CMAKE_COMMAND} -E remove python37._pth)
     else()
       set(PROGNAME python3)
@@ -107,11 +118,18 @@ function(vcpkg_find_acquire_program VAR)
   elseif(VAR MATCHES "PYTHON2")
     if(CMAKE_HOST_WIN32)
       set(PROGNAME python)
-      set(SUBDIR "python2")
+      if (VCPKG_TARGET_ARCHITECTURE STREQUAL x86)
+        set(SUBDIR "python-2.7.16-x86")
+        set(URL "https://www.python.org/ftp/python/2.7.16/python-2.7.16.msi")
+        set(ARCHIVE "python-2.7.16.msi")
+        set(HASH c34a6fa2438682104dccb53650a2bdb79eac7996deff075201a0f71bb835d60d3ed866652a1931f15a29510fe8e1009ac04e423b285122d2e5747fefc4c10254)
+      else()
+        set(SUBDIR "python-2.7.16-x64")
+        set(URL "https://www.python.org/ftp/python/2.7.16/python-2.7.16.amd64.msi")
+        set(ARCHIVE "python-2.7.16.amd64.msi")
+        set(HASH 47c1518d1da939e3ba6722c54747778b93a44c525bcb358b253c23b2510374a49a43739c8d0454cedade858f54efa6319763ba33316fdc721305bc457efe4ffb)
+      endif()
       set(PATHS ${DOWNLOADS}/tools/python/${SUBDIR})
-      set(URL "https://www.python.org/ftp/python/2.7.16/python-2.7.16.msi")
-      set(ARCHIVE "python-2.7.16.msi")
-      set(HASH c34a6fa2438682104dccb53650a2bdb79eac7996deff075201a0f71bb835d60d3ed866652a1931f15a29510fe8e1009ac04e423b285122d2e5747fefc4c10254)
     else()
       set(PROGNAME python2)
       set(BREW_PACKAGE_NAME "python2")
@@ -174,10 +192,10 @@ function(vcpkg_find_acquire_program VAR)
     else()
       set(SCRIPTNAME meson)
     endif()
-    set(PATHS ${DOWNLOADS}/tools/meson/meson-0.52.0)
-    set(URL "https://github.com/mesonbuild/meson/archive/0.52.0.zip")
-    set(ARCHIVE "meson-0.52.0.zip")
-    set(HASH 2f2657599f19933c02be2a1faa508d5b2d137fba1ccc9d68a6b6d04b8d21163c33220c673643fa444fa86e94ba010cf8a851b9e6abc096559a7c735f5099a180)
+    set(PATHS ${DOWNLOADS}/tools/meson/meson-0.53.2)
+    set(URL "https://github.com/mesonbuild/meson/archive/0.53.2.zip")
+    set(ARCHIVE "meson-0.53.2.zip")
+    set(HASH 86c3347395528d2358c9514a76ec8a60908f8abadece5ecb9bac633ea735d4b40a27683002db017f06fa48ec68ea1bfe64d216fa17a54d6d42c8bc45f55606b2)
   elseif(VAR MATCHES "FLEX")
     if(CMAKE_HOST_WIN32)
       set(PROGNAME win_flex)
